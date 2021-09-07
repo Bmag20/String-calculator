@@ -40,7 +40,7 @@ namespace StringCalculator
                 if (number < 0)
                     negativeNumbers.Add(number);
                 else
-                    sum += number;
+                    sum += (number >= 1000) ? 0 : number;
             }
             if (negativeNumbers.Count > 0)
                 throw new FormatException("Negatives not allowed: " + String.Join(", ", negativeNumbers));
