@@ -1,3 +1,4 @@
+using System;
 using StringCalculator;
 using Xunit;
 
@@ -43,6 +44,13 @@ namespace StringCalculatorTests
         public void Support_single_character_delimiter_given_in_appropriate_format()
         {
             Assert.Equal(3, Calculator.Add("//;\n1;2"));
+        }
+
+        [Fact]
+        public void A_negative_number_will_throw_Negatives_not_allowed_exception_along_with_the_passed_negative_number()
+        {
+            var ex = Assert.Throws<FormatException>(() => Calculator.Add("-1,2,-3"));
+            Assert.Equal("Negatives not allowed: -1, -3", ex.Message);
         }
     }
 }
