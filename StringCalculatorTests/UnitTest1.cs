@@ -58,5 +58,11 @@ namespace StringCalculatorTests
         {
             Assert.Equal(2, Calculator.Add("1000,1001,2"));
         }
+        
+        [Fact]
+        public void Delimiters_can_be_of_any_length_with_the_following_format()
+        {
+            Assert.Equal(6, Calculator.Add("//[***]\n1***2***3"));
+        }
     }
 }
