@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -8,22 +9,45 @@ namespace StringCalculator
     {
         public static int Add(String input)
         {
-            Console.WriteLine("hi");
             if (input == "")
                 return 0;
             if (Regex.Match(input, @"//.\n\d(.\d)+").Success)
             {
-                Console.WriteLine(input[2]);
-                var numbers = input.Split("\n")[1].Split(input[2]);
-                Console.WriteLine(numbers[0]);
-                return numbers.Sum(Convert.ToInt32);
+                var inputAfterNewLine = input.Split("\n")[1];
+                var listOfNumbers = ConvertStringToIntegerList(inputAfterNewLine, new char[]{input[2]});
+                return AddListOfPositiveNumbers(listOfNumbers);
             }
             if (Regex.IsMatch(input, @"\d(\\n|,\d)+"))
             {
-                var numbers = input.Split(new char [] {',', '\n'});
-                return numbers.Sum(Convert.ToInt32);
+                var listOfNumbers = ConvertStringToIntegerList(input, new char[]{',', '\n'});
+                return AddListOfPositiveNumbers(listOfNumbers);
             }
             return Convert.ToInt32(input);
         }
+
+        private static List<int> ConvertStringToIntegerList(String inputString, char[] delimiters)
+        {
+            var numbers = inputString.Split(delimiters);
+            return numbers.Select(a => Convert.ToInt32(a)).ToList();
+        }
+        
+        private static int AddListOfPositiveNumbers(List<int> inputNumbers)
+        {
+            int sum = 0;
+            List<int> negativeNumbers = new List<int>();
+            foreach (var number in inputNumbers)
+            {
+                if (number < 0)
+                    negativeNumbers.Add(number);
+                else
+                    sum += number;
+            }
+            if (negativeNumbers.Count > 0)
+                throw new FormatException("Negatives not allowed: " + String.Join(", ", negativeNumbers));
+            return sum;
+        }
+
+        
+        
     }
 }
