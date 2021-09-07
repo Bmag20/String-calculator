@@ -16,5 +16,11 @@ namespace StringCalculatorTests
         {
             Assert.Equal(3, Calculator.Add("3"));
         }
+        
+        [Fact]
+        public void Two_numbers_returns_the_sum_of_the_numbers()
+        {
+            Assert.Equal(8, Calculator.Add("3,5"));
+        }
     }
 }
