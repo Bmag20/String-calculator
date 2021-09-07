@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace StringCalculator
 {
@@ -11,7 +12,7 @@ namespace StringCalculator
             if (input.Contains(","))
             {
                 var numbers = input.Split(",");
-                return Convert.ToInt32(numbers[0]) + Convert.ToInt32(numbers[1]);
+                return numbers.Sum(Convert.ToInt32);
             }
             return Convert.ToInt32(input);
         }
