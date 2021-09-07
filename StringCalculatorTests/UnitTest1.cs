@@ -52,5 +52,11 @@ namespace StringCalculatorTests
             var ex = Assert.Throws<FormatException>(() => Calculator.Add("-1,2,-3"));
             Assert.Equal("Negatives not allowed: -1, -3", ex.Message);
         }
+        
+        [Fact]
+        public void Numbers_greater_or_equal_to_1000_should_be_ignored()
+        {
+            Assert.Equal(2, Calculator.Add("1000,1001,2"));
+        }
     }
 }
