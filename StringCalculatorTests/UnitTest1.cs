@@ -72,5 +72,17 @@ namespace StringCalculatorTests
         {
             Assert.Equal(6, Calculator.Add("//[*][%]\n1*2%3"));
         }
+        
+        [Fact]
+        public void Handle_multiple_delimiters_with_a_length_longer_than_one_character()
+        {
+            Assert.Equal(10, Calculator.Add("//[***][#][%]\n1***2#3%4"));
+        }
+        
+        [Fact]
+        public void Handle_delimiters_that_have_numbers_as_part_of_them_number_not_being_on_the_edge()
+        {
+            Assert.Equal(10, Calculator.Add("//[*1*][%]\n1*1*2%3"));
+        }
     }
 }
