@@ -7,27 +7,36 @@ namespace StringCalculator
 {
     public static class Calculator
     {
-        public static int Add(String input)
+        public static int Add(String inputString)
         {
-            if (input == "")
+            if (inputString == "")
                 return 0;
-            if (Regex.Match(input, @"//.\n\d(.\d)+").Success)
+            if (Regex.IsMatch(inputString, @"//.\n\d(.\d)+"))
             {
-                var inputAfterNewLine = input.Split("\n")[1];
-                var listOfNumbers = ConvertStringToIntegerList(inputAfterNewLine, new char[]{input[2]});
+                var inputAfterNewLine = inputString.Split("\n")[1];
+                var listOfNumbers = ConvertStringToIntegerList(inputAfterNewLine, inputString[2].ToString());
                 return AddListOfPositiveNumbers(listOfNumbers);
             }
-            if (Regex.IsMatch(input, @"\d(\\n|,\d)+"))
+
+            if (Regex.IsMatch(inputString, @"(?<=//\[)"))
             {
-                var listOfNumbers = ConvertStringToIntegerList(input, new char[]{',', '\n'});
+                var delimiter = Regex.Match(inputString, @"(?<=\[).*(?=\])").ToString();
+                var inputAfterNewLine = inputString.Split("\n")[1];
+                var listOfNumbers = ConvertStringToIntegerList(inputAfterNewLine, delimiter);
                 return AddListOfPositiveNumbers(listOfNumbers);
             }
-            return Convert.ToInt32(input);
+            if (Regex.IsMatch(inputString, @"\d(\\n|,\d)+"))
+            {
+                inputString = Regex.Replace(inputString, @"\n", ",");
+                var listOfNumbers = ConvertStringToIntegerList(inputString, ",");
+                return AddListOfPositiveNumbers(listOfNumbers);
+            }
+            return Convert.ToInt32(inputString);
         }
 
-        private static List<int> ConvertStringToIntegerList(String inputString, char[] delimiters)
+        private static List<int> ConvertStringToIntegerList(String inputString, String regExPattern)
         {
-            var numbers = inputString.Split(delimiters);
+            var numbers = inputString.Split(@$"{regExPattern}");
             return numbers.Select(a => Convert.ToInt32(a)).ToList();
         }
         
