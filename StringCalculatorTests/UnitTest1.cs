@@ -89,7 +89,6 @@ namespace StringCalculatorTests
         public void Delimiters_that_have_numbers_as_part_of_them_number_being_on_the_edge_fails()
         {
             var ex = Assert.Throws<FormatException>(() => Calculator.Add("//[**1][%]\n1**11*2%3"));
-            Assert.Equal("Invalid delimiter: **1", ex.Message);
         }
     }
 }
