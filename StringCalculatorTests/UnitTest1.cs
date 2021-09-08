@@ -64,5 +64,11 @@ namespace StringCalculatorTests
         {
             Assert.Equal(6, Calculator.Add("//[***]\n1***2***3"));
         }
+        
+        [Fact]
+        public void Allow_multiple_delimiters()
+        {
+            Assert.Equal(6, Calculator.Add("//[*][%]\n1*2%3"));
+        }
     }
 }
