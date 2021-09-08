@@ -14,29 +14,30 @@ namespace StringCalculator
             if (Regex.IsMatch(inputString, @"//.\n\d(.\d)+"))
             {
                 var inputAfterNewLine = inputString.Split("\n")[1];
-                var listOfNumbers = ConvertStringToIntegerList(inputAfterNewLine, inputString[2].ToString());
+                var listOfNumbers = ConvertStringToIntegerList(inputAfterNewLine, Regex.Escape(inputString[2].ToString()));
                 return AddListOfPositiveNumbers(listOfNumbers);
             }
 
             if (Regex.IsMatch(inputString, @"(?<=//\[)"))
             {
-                var delimiter = Regex.Match(inputString, @"(?<=\[).*(?=\])").ToString();
+                var delimiterString = Regex.Match(inputString, @"(?<=\[).*(?=\])").ToString();
+                var delimiters = delimiterString.Split("][");
+                var escapedDelimiters = delimiters.Select(Regex.Escape).ToList();
+                var regExPattern = String.Join("|", escapedDelimiters);
                 var inputAfterNewLine = inputString.Split("\n")[1];
-                var listOfNumbers = ConvertStringToIntegerList(inputAfterNewLine, delimiter);
+                var listOfNumbers = ConvertStringToIntegerList(inputAfterNewLine, regExPattern);
                 return AddListOfPositiveNumbers(listOfNumbers);
             }
-            if (Regex.IsMatch(inputString, @"\d(\\n|,\d)+"))
+            else
             {
-                inputString = Regex.Replace(inputString, @"\n", ",");
-                var listOfNumbers = ConvertStringToIntegerList(inputString, ",");
+                var listOfNumbers = ConvertStringToIntegerList(inputString, "\\n|,");
                 return AddListOfPositiveNumbers(listOfNumbers);
             }
-            return Convert.ToInt32(inputString);
         }
 
         private static List<int> ConvertStringToIntegerList(String inputString, String regExPattern)
         {
-            var numbers = inputString.Split(@$"{regExPattern}");
+            var numbers = Regex.Split(inputString, @$"{regExPattern}");
             return numbers.Select(a => Convert.ToInt32(a)).ToList();
         }
         
@@ -55,8 +56,5 @@ namespace StringCalculator
                 throw new FormatException("Negatives not allowed: " + String.Join(", ", negativeNumbers));
             return sum;
         }
-
-        
-        
     }
 }

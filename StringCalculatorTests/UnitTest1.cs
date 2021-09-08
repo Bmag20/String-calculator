@@ -44,6 +44,8 @@ namespace StringCalculatorTests
         public void Support_single_character_delimiter_given_in_appropriate_format()
         {
             Assert.Equal(3, Calculator.Add("//;\n1;2"));
+            Assert.Equal(3, Calculator.Add("//*\n1*2"));
+
         }
 
         [Fact]
