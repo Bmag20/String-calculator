@@ -82,7 +82,7 @@ namespace StringCalculatorTests
         [Fact]
         public void Handle_delimiters_that_have_numbers_as_part_of_them_number_not_being_on_the_edge()
         {
-            Assert.Equal(10, Calculator.Add("//[*1*][%]\n1*1*2%3"));
+            Assert.Equal(6, Calculator.Add("//[*1*][%]\n1*1*2%3"));
         }
     }
 }
