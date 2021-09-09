@@ -7,36 +7,31 @@ namespace StringCalculator
 {
     public static class Calculator
     {
-        public static int Add(String inputString)
+        private const string DefaultDelimiter = "\\n|,";
+
+        public static int Add(string inputString)
         {
-            if (inputString == "")
-                return 0;
-            var delimiterPattern = GenerateDelimiterPattern(inputString);
-            if (Regex.IsMatch(inputString, @"^//"))
+            if (inputString == "") return 0;
+            string delimiterPattern;
+            if (IsSupportOtherDelimiter(inputString))
+            {
+                delimiterPattern = PatternGenerator.GenerateDelimiterPattern(inputString);
+                // Remove the initial part where the delimiters are defined from the input string
                 inputString = inputString.Split("\n")[1];
+            }
+            else
+                delimiterPattern = DefaultDelimiter;
+
             var listOfNumbers = ConvertStringToIntegerList(inputString, delimiterPattern);
             return AddPositiveIntegers(listOfNumbers);
         }
 
-        private static String GenerateDelimiterPattern(String inputString)
+        private static bool IsSupportOtherDelimiter(string inputString)
         {
-            if (!Regex.IsMatch(inputString, @"(?<=//)")) return "\\n|,";
-            var delimiterString = Regex.Match(inputString, @"(?<=//).*(?=\n)").ToString();
-            delimiterString = RemoveFirstAndLastSquareBrackets(delimiterString);
-            var delimiters = delimiterString.Split("][");
-            var escapedDelimiters = delimiters.Select(Regex.Escape).ToList();
-            return String.Join("|", escapedDelimiters);
+            return Regex.IsMatch(inputString, @"^//");
         }
 
-        private static String RemoveFirstAndLastSquareBrackets(String inputString)
-        {
-            return Regex.IsMatch(inputString, @"^\[.*\]$")
-                ? inputString.Substring(1, inputString.Length - 2)
-                : inputString;
-        }
-
-
-        private static List<int> ConvertStringToIntegerList(String stringToConvert, String delimiterPattern)
+        private static List<int> ConvertStringToIntegerList(string stringToConvert, string delimiterPattern)
         {
             var numbers = Regex.Split(stringToConvert, @$"{delimiterPattern}");
             return numbers.Select(a => Convert.ToInt32(a)).ToList();
@@ -55,7 +50,7 @@ namespace StringCalculator
             }
 
             if (negativeNumbers.Count > 0)
-                throw new FormatException("Negatives not allowed: " + String.Join(", ", negativeNumbers));
+                throw new FormatException("Negatives not allowed: " + string.Join(", ", negativeNumbers));
             return sum;
         }
     }
